@@ -2,15 +2,16 @@
 
 from cgi import test
 from re import split
-import threading
 from unittest import result
 from vosk import Model, KaldiRecognizer, SetLogLevel
+import eng_to_ipa as p
 import os
 import wave
 import json
 #import time
 #from playsound import playsound
 #from threading import Thread
+#import threading
 
 """
 def PlaySoundOnThread(audioFileName):
@@ -95,7 +96,13 @@ def transcribeFile(audioFile, model):
 
     wf.close()  # close audiofile
     return list_of_Words
-    
+
+def ConvertEnglishToIpa(list_of_Words):
+    for i in range(len(list_of_Words)):
+        ipaWord = p.convert(list_of_Words[i].word)
+        list_of_Words[i].word = ipaWord
+
+
 class TimeLine:
         def __init__(self, fileLengthInSeconds, keyframesPerSecond):
             self.fileLengthInSeconds = fileLengthInSeconds
@@ -143,6 +150,7 @@ class TimeLine:
 timeLine = TimeLine(3.1, 24)
 list_of_Words = []
 list_of_Words = transcribeFile(audioFile, model)
+ConvertEnglishToIpa(list_of_Words)
 timeLine.ModifyTimeLine(list_of_Words)
 #timeLine.PlayTimeline();
 
