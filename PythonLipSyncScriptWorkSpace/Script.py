@@ -8,9 +8,30 @@ from vosk import Model, KaldiRecognizer, SetLogLevel
 import os
 import wave
 import json
-import time
-from playsound import playsound
-from threading import Thread
+#import time
+#from playsound import playsound
+#from threading import Thread
+
+"""
+def PlaySoundOnThread(audioFileName):
+    playsound(audioFileName)
+"""
+
+audioFile = "D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav"
+voskModelPath =  "D:\Github\Python LipsyncScript\model"
+
+SetLogLevel(0)
+
+if 'model' not in globals():
+    print("Loading model...")
+    if not os.path.exists(voskModelPath):
+        print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
+        exit (1)
+    model = Model(voskModelPath)
+print("Model is loaded")
+
+
+
 
 class Word:
     ''' A class representing a word from the JSON format for vosk speech recognition API '''
@@ -35,23 +56,13 @@ class Word:
         return "{:20} from {:.2f} sec to {:.2f} sec, confidence is {:.2f}%".format(
             self.word, self.start, self.end, self.conf*100)
 
-def PlaySoundOnThread(audioFileName):
-    playsound(audioFileName)
-
-def transcribeFile(audioFile):
-
-    SetLogLevel(0)
-    
-    if not os.path.exists("D:\Github\Python LipsyncScript\model"):
-        print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
-        exit (1)
+def transcribeFile(audioFile, model):
 
     wf = wave.open(audioFile, "rb")
     if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
         print ("Audio file must be WAV format mono PCM.")
         exit (1)
-    
-    model = Model("D:\Github\Python LipsyncScript\model")
+
     rec = KaldiRecognizer(model, wf.getframerate())
     rec.SetWords(True)
     
@@ -85,7 +96,6 @@ def transcribeFile(audioFile):
     wf.close()  # close audiofile
     return list_of_Words
     
-
 class TimeLine:
         def __init__(self, fileLengthInSeconds, keyframesPerSecond):
             self.fileLengthInSeconds = fileLengthInSeconds
@@ -106,48 +116,38 @@ class TimeLine:
                     keyFrameTimeStamp = round(self.keyframesPerSecond * ( word.start + (secondsPerKeyframe * i)))
                     timeLine.timeLine[keyFrameTimeStamp] = character
                 
-                
-                
-            
-            
-
-
+        """      
         def PlayTimeline(self):
-            #playsound('Hello there.wav')
+            #Audio, thread and time
+            #audioThread = threading.Thread(target=PlaySoundOnThread, args=('D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav'))
+            #audioThread.start()
+
+
             currentKeyframe = 0
             lastPresentedKeyframe = -1
-            audioThread = threading.Thread(target=PlaySoundOnThread, args=('D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav', ))
             playTimeInKeyframes = round(self.fileLengthInSeconds * self.keyframesPerSecond)
-            audioThread.start()
             startTime = time.time()
             
 
-            while(lastPresentedKeyframe < playTimeInKeyframes):
+            while(lastPresentedKeyframe < playTimeInKeyframes - 1):
                 playTime = float(time.time()) - startTime
 
-                currentKeyframe = int(playTime * self.keyframesPerSecond)
+                currentKeyframe = round(playTime * self.keyframesPerSecond)
 
-                if(currentKeyframe > lastPresentedKeyframe and currentKeyframe < playTimeInKeyframes):
+                if(currentKeyframe > lastPresentedKeyframe):
                     lastPresentedKeyframe = currentKeyframe
                     print(self.timeLine[currentKeyframe])
-
-
-
-
+        """
 
 
 timeLine = TimeLine(3.1, 24)
 list_of_Words = []
-list_of_Words = transcribeFile("D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav")
+list_of_Words = transcribeFile(audioFile, model)
 timeLine.ModifyTimeLine(list_of_Words)
-timeLine.PlayTimeline();
+#timeLine.PlayTimeline();
+
+
+for c in timeLine.timeLine:
+    print(c)
+
 print("Run completed\n")
-
-"""
-for keyframe in timeLine.timeLine:
-    print(keyframe)
-
-for word in list_of_Words:
-        print(word.to_string())
-
-"""
