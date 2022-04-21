@@ -8,32 +8,45 @@ import eng_to_ipa as p
 import os
 import wave
 import json
+import contextlib
 #import time
 #from playsound import playsound
 #from threading import Thread
 #import threading
 
-from PySide2 import QtCore, QtWidgets
-import pymel.core as pm
-import contextlib
+
+"""#Reimport This"""
+#from PySide2 import QtCore, QtWidgets
+#import pymel.core as pm
 
 """
 def PlaySoundOnThread(audioFileName):
     playsound(audioFileName)
 """
 
-audioFile = "D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav"
-voskModelPath =  "D:\Github\Python LipsyncScript\model"
+filePathKeys = ["audioFile", "voskModel", "config"]
+filePaths = {"audioFile" : "something.wav", "voskModel" : "ModelPath", "config" : "ConfigPath"}
+keyframesPerSecond = 24
+audioFileLength = 0
+#audioFile = "D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav"
+#voskModelPath =  "D:\Github\Python LipsyncScript\model"
+
+f = open("D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\LipSyncerConfig.txt", "r")
+filePaths["voskModel"] = f.readline().replace('\n', '')
+filePaths["audioFile"] = f.readline().replace('\n', '')
+f.close()
 
 SetLogLevel(0)
 
 if 'model' not in globals():
     print("Loading model...")
-    if not os.path.exists(voskModelPath):
+    if not os.path.exists(filePaths["voskModel"]):
         print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
         exit (1)
-    model = Model(voskModelPath)
+    model = Model(filePaths["voskModel"])
 print("Model is loaded")
+
+
 
 class Word:
     ''' A class representing a word from the JSON format for vosk speech recognition API '''
@@ -77,6 +90,7 @@ def transcribeFile(audioFile, model):
         if len(data) == 0:
             break
         if rec.AcceptWaveform(data):
+            print(rec.Result())
             part_result = json.loads(rec.Result())
             results.append(part_result)
     part_result = json.loads(rec.FinalResult())
@@ -103,6 +117,15 @@ def ConvertEnglishToIpa(list_of_Words):
         ipaWord = p.convert(list_of_Words[i].word)
         list_of_Words[i].word = ipaWord
 
+def CheckAudioFileLength():
+    #https://stackoverflow.com/questions/7833807/get-wav-file-length-or-duration
+    fname = filePaths["audioFile"]
+    with contextlib.closing(wave.open(fname,'r')) as f:
+        frames = f.getnframes()
+        rate = f.getframerate()
+        duration = frames / float(rate)
+        return duration
+
 class TimeLine:
         def __init__(self, fileLengthInSeconds, keyframesPerSecond):
             self.fileLengthInSeconds = fileLengthInSeconds
@@ -117,11 +140,10 @@ class TimeLine:
             for word in list_of_Words:
                 wordTimeLength = float(word.end) - float(word.start) 
                 secondsPerKeyframe = wordTimeLength/len(word.word)
-                
                 for i in range(len(word.word)):
                     character = word.word[i]
                     keyFrameTimeStamp = round(self.keyframesPerSecond * ( word.start + (secondsPerKeyframe * i)))
-                    timeLine.timeLine[keyFrameTimeStamp] = character
+                    self.timeLine[keyFrameTimeStamp] = character
                 
         """      
         def PlayTimeline(self):
@@ -147,12 +169,13 @@ class TimeLine:
         """
 
 def RunScript():
-    timeLine = TimeLine(3.1, 24)
+    audioFileLength = CheckAudioFileLength()
+    timeLine = TimeLine(audioFileLength, keyframesPerSecond)
     list_of_Words = []
-    list_of_Words = transcribeFile(audioFile, model)
-    ConvertEnglishToIpa(list_of_Words)
+    list_of_Words = transcribeFile(filePaths["audioFile"], model)
+    #ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
-    #timeLine.PlayTimeline();
+    """#timeLine.PlayTimeline();""" #Deffect
 
 
     for c in timeLine.timeLine:
@@ -160,24 +183,18 @@ def RunScript():
 
     print("Run completed\n")
 
-
-
-
+RunScript()
 
 ##UI and Pymel##
+exit (1)
 
 def ChangeFilePathForAudioFile():
     newPath = pm.fileDialog2(fileFilter="*.wav")
     filePaths["audioFile"] = str(newPath[0])
     filePathQLineEdit[0].setText(filePaths["audioFile"])
+    CheckAudioFileLength()
     
-    #https://stackoverflow.com/questions/7833807/get-wav-file-length-or-duration
-    fname = filePaths["audioFile"]
-    with contextlib.closing(wave.open(fname,'r')) as f:
-        frames = f.getnframes()
-        rate = f.getframerate()
-        duration = frames / float(rate)
-        print(duration)
+    
     
 def ChangeFilePathForModel():
     newPath = pm.fileDialog2(fm=2, fileFilter="*.:")
@@ -188,7 +205,6 @@ def ChangeFilePathForConfig():
     filePathQLineEdit[2].setText("NOT WORKING")
 
 
-
 #MAIN LOOP
 wid = QtWidgets.QWidget()
 wid.resize(1024, 1024)
@@ -196,8 +212,6 @@ wid.setWindowTitle("Window")
 
 #File system
 
-filePathKeys = ["audioFile", "voskModel", "config"]
-filePaths = {"audioFile" : "something.wav", "voskModel" : "ModelPath", "config" : "ConfigPath"}
 filePathQLineEdit = []
 changeFilePathQPushButton = []
 filePathLabel = []
