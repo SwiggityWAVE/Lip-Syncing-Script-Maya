@@ -1,5 +1,6 @@
 #https://towardsdatascience.com/speech-recognition-with-timestamps-934ede4234b2
 
+from asyncio.windows_events import NULL
 from cgi import test
 from re import split
 from unittest import result
@@ -155,21 +156,31 @@ class TimeLine:
                     keyFrameTimeStamp = round(self.keyframesPerSecond * ( word.start + (secondsPerKeyframe * i)))
                     self.timeLine[keyFrameTimeStamp] = character
                 
-        
+def animateMesh(timeLine):
+    print("This animations has ", len(timeLine.timeLine), " frames")
+    for keyframe in range(len(timeLine.timeLine)):
+        #print(timeLine.timeLine[keyframe])
+        #pm.currentTime(keyframe)
+
+        if timeLine.timeLine[keyframe] == '.':
+            print("DOT")
+            pm.setKeyframe(visemeNodes["aa"], at='weight[0]', v=0, t=keyframe)
+        else:
+            print("NOT DOT")
+            pm.setKeyframe(visemeNodes["aa"], at='weight[0]', v=1, t=keyframe)
 
 def RunScript():
+    BindVisemeNodes()
     audioFileLength = CheckAudioFileLength()
     timeLine = TimeLine(audioFileLength, keyframesPerSecond)
     list_of_Words = []
     list_of_Words = transcribeFile(filePaths["audioFile"], model)
     ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
+    animateMesh(timeLine)
+    print("Task completed")
 
-
-    for c in timeLine.timeLine:
-        print(c)
-
-    print("Run completed\n")
+    
 
 #RunScript()
 
@@ -227,6 +238,11 @@ RunScriptQPushButton = QtWidgets.QPushButton('Run Script', parent = wid)
 RunScriptQPushButton.move(512, 48 * index)
 RunScriptQPushButton.clicked.connect(RunScript)
 
+UndoQPushButton = QtWidgets.QPushButton('Undo', parent = wid)
+UndoQPushButton.move(512, 56 * index)
+UndoQPushButton.clicked.connect(pm.undo)
+
+
 
 #Viseme System
 #Lists all blendshapes in scene
@@ -236,15 +252,25 @@ for blendshape in blendShapes:
     blendShapesAsString.append(str(blendshape))
 
 
-visemeList = ["Silent: ", "PP: ", "FF: ", "TH: ", "DD: ", "kk: ", "CH: ", "SS: ", "nn: ", "RR: ", "aa: ", "E: ", "I: ", "O: ", "U: "]
+visemeList = ["Silent", "PP", "FF", "TH", "DD", "kk", "CH", "SS", "nn", "RR", "aa", "E", "I", "O", "U"]
 visemeLabel = []
 visemeQComboBox = []
+visemeNodes = {"Silent" : NULL, "PP" : NULL, "FF" : NULL, "TH" : NULL, "DD" : NULL, "kk" : NULL, "CH" : NULL, "SS" : NULL, "nn" : NULL, "RR" : NULL, "aa" : NULL, "E" : NULL, "I": NULL, "O" : NULL, "U": NULL}
+
+
+def BindVisemeNodes():
+    index = 0
+    for viseme in visemeList:
+        visemeNodes[viseme] = visemeQComboBox[index].currentText() + '.envelope'
+        index += 1
+    
+        
 
 
 index = 0
 for viseme in visemeList:
     visemeLabel.append(QtWidgets.QLabel(wid))
-    visemeLabel[index].setText(visemeList[index])
+    visemeLabel[index].setText(visemeList[index] + ": ")
     visemeLabel[index].move(0, 48 * index)
     
     visemeQComboBox.append(QtWidgets.QComboBox(wid))
