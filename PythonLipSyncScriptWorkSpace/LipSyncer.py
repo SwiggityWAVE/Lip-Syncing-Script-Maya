@@ -169,6 +169,9 @@ def animateMesh(timeLine):
             print("NOT DOT")
             pm.setKeyframe(visemeNodes["aa"], at='weight[0]', v=1, t=keyframe)
 
+        
+
+
 def RunScript():
     BindVisemeNodes()
     audioFileLength = CheckAudioFileLength()
