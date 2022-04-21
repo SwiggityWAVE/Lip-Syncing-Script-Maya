@@ -4,6 +4,10 @@ import pymel.core as pm
 import wave
 import contextlib
 
+
+###Pymel Code###
+
+
 def ChangeFilePathForAudioFile():
     newPath = pm.fileDialog2(fileFilter="*.wav")
     filePaths["audioFile"] = str(newPath[0])
