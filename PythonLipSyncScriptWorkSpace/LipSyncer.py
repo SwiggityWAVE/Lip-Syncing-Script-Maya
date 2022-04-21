@@ -9,20 +9,31 @@ import os
 import wave
 import json
 import contextlib
+
+
+
+from PySide2 import QtCore, QtWidgets
+import pymel.core as pm
+
+"""
+#REJECTION CORNER
+
+
 #import time
 #from playsound import playsound
 #from threading import Thread
 #import threading
 
 
-"""#Reimport This"""
-#from PySide2 import QtCore, QtWidgets
-#import pymel.core as pm
-
-"""
 def PlaySoundOnThread(audioFileName):
     playsound(audioFileName)
 """
+
+
+
+"""#Reimport This"""
+
+
 
 filePathKeys = ["audioFile", "voskModel", "config"]
 filePaths = {"audioFile" : "something.wav", "voskModel" : "ModelPath", "config" : "ConfigPath"}
@@ -90,12 +101,11 @@ def transcribeFile(audioFile, model):
         if len(data) == 0:
             break
         if rec.AcceptWaveform(data):
-            print(rec.Result())
             part_result = json.loads(rec.Result())
             results.append(part_result)
+            print(part_result)
     part_result = json.loads(rec.FinalResult())
     results.append(part_result)
-
 
     # convert list of JSON dictionaries to list of 'Word' objects
     list_of_Words = []
@@ -145,37 +155,15 @@ class TimeLine:
                     keyFrameTimeStamp = round(self.keyframesPerSecond * ( word.start + (secondsPerKeyframe * i)))
                     self.timeLine[keyFrameTimeStamp] = character
                 
-        """      
-        def PlayTimeline(self):
-            #Audio, thread and time
-            #audioThread = threading.Thread(target=PlaySoundOnThread, args=('D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav'))
-            #audioThread.start()
-
-
-            currentKeyframe = 0
-            lastPresentedKeyframe = -1
-            playTimeInKeyframes = round(self.fileLengthInSeconds * self.keyframesPerSecond)
-            startTime = time.time()
-            
-
-            while(lastPresentedKeyframe < playTimeInKeyframes - 1):
-                playTime = float(time.time()) - startTime
-
-                currentKeyframe = round(playTime * self.keyframesPerSecond)
-
-                if(currentKeyframe > lastPresentedKeyframe):
-                    lastPresentedKeyframe = currentKeyframe
-                    print(self.timeLine[currentKeyframe])
-        """
+        
 
 def RunScript():
     audioFileLength = CheckAudioFileLength()
     timeLine = TimeLine(audioFileLength, keyframesPerSecond)
     list_of_Words = []
     list_of_Words = transcribeFile(filePaths["audioFile"], model)
-    #ConvertEnglishToIpa(list_of_Words)
+    ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
-    """#timeLine.PlayTimeline();""" #Deffect
 
 
     for c in timeLine.timeLine:
@@ -183,10 +171,10 @@ def RunScript():
 
     print("Run completed\n")
 
-RunScript()
+#RunScript()
 
 ##UI and Pymel##
-exit (1)
+
 
 def ChangeFilePathForAudioFile():
     newPath = pm.fileDialog2(fileFilter="*.wav")
