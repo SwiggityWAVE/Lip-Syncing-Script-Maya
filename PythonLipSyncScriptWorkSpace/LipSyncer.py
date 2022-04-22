@@ -14,6 +14,12 @@ import contextlib
 
 
 from PySide2 import QtCore, QtWidgets
+
+alertWid = QtWidgets.QWidget()
+alertWid.resize(512, 64)
+alertWid.setWindowTitle("Program is loading")
+alertWid.show()
+
 import pymel.core as pm
 
 """
@@ -33,6 +39,8 @@ def PlaySoundOnThread(audioFileName):
 
 
 """#Reimport This"""
+
+
 
 
 
@@ -61,6 +69,7 @@ if 'model' not in globals():
 print("Model is loaded")
 
 
+alertWid.close()
 
 class Word:
     ''' A class representing a word from the JSON format for vosk speech recognition API '''
