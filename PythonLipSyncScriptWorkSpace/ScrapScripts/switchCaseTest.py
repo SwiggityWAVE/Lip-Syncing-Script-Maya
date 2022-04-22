@@ -4,59 +4,59 @@
 case = 'j'
 undefinedChars = []
 
-if (case == 'ɓ') or (case == 'ɱ') or (case == 'ɯ') or (case == 'ɰ') or (case == 'ʘ') or (case == '') or (case == '') or (case == '') or (case == '') or (case == ''):
+if (case == 'ɓ') or (case == 'ɱ') or (case == 'ɯ') or (case == 'ɰ') or (case == 'ʘ') or (case == 'p') or (case == 'b') or (case == 'm'):
     #Viseme:    PP                       Phonemes:      p, b, m                         Word example:           put, bat, mat
     print("yo")
 
-elif (case == 'β') or (case == 'φ') or (case == 'ɸ') or (case == 'ʋ') or (case == 'ʍ') or (case == 'ŵ') or (case == 'ɯ') or (case == 'ɰ') or (case == 'ŵ') or (case == 'ẃ'):
+elif (case == 'β') or (case == 'φ') or (case == 'ɸ') or (case == 'ʋ') or (case == 'ʍ') or (case == 'ŵ') or (case == 'ɯ') or (case == 'ɰ') or (case == 'ŵ') or (case == 'ẃ') or (case == 'f'):
     #Viseme:    FF                       Phonemes:      f, v                            Word example:           fat, vat
     print("yoo")
 
-elif (case == 'ð') or (case == 'θ') or (case == 'þ') or (case == 'w') or (case == 'ʷ') or (case == '') or (case == '') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ð') or (case == 'θ') or (case == 'þ') or (case == 'w') or (case == 'ʷ'):
     #Viseme:    TH                       Phonemes:      th                              Word example:           think, that
     print("yooo")
 
-elif (case == 'ɖ') or (case == 'ḍ') or (case == 'ɗ') or (case == 'ʄ') or (case == 'ʈ') or (case == 'ṭ') or (case == '') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ɖ') or (case == 'ḍ') or (case == 'ɗ') or (case == 'ʄ') or (case == 'ʈ') or (case == 'ṭ') or (case == 'd') or (case == '') or (case == '') or (case == ''):
     #Viseme:    DD                       Phonemes:      t, d                            Word example:           tip, doll
     print("yooo")
 
-elif (case == 'ɟ') or (case == 'γ') or (case == 'ɣ') or (case == 'ɠ') or (case == 'ǰ') or (case == 'ʝ') or (case == 'ʲ') or (case == 'ʲ') or (case == 'ɟ') or (case == 'ɥ') or (case == 'ŷ') or (case == 'y') or (case == 'ɰ') or (case == 'ỹ') or (case == 'ȳ') or (case == '') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ɟ') or (case == 'γ') or (case == 'ɣ') or (case == 'ɠ') or (case == 'ǰ') or (case == 'ʝ') or (case == 'ʲ') or (case == 'ʲ') or (case == 'ɟ') or (case == 'ɥ') or (case == 'ŷ') or (case == 'y') or (case == 'ɰ') or (case == 'ỹ') or (case == 'ȳ') or (case == 'k') or (case == 'g'):
     #Viseme:    kk                       Phonemes:      k, g                            Word example:           call, gas
     print("yooo")
 
-elif (case == 'ç') or (case == 'č') or (case == 'ʃ') or (case == 'ʂ') or (case == 'χ') or (case == '') or (case == '') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ç') or (case == 'č') or (case == 'ʃ') or (case == 'ʂ') or (case == 'χ'):
     #Viseme:    CH                       Phonemes:      tS, dZ, S                       Word example:           chair, join, she
     print("yooo")
 
-elif (case == 'ɕ') or (case == 'š') or (case == 'ś') or (case == 'ṣ') or (case == 'ẓ') or (case == 'ʒ') or (case == 'ž') or (case == 'ʑ') or (case == 'ʐ') or (case == ''):
+elif (case == 'ɕ') or (case == 'š') or (case == 'ś') or (case == 'ṣ') or (case == 'ẓ') or (case == 'ʒ') or (case == 'ž') or (case == 'ʑ') or (case == 'ʐ') or (case == 's') or (case == 'z'):
     #Viseme:    SS                       Phonemes:      s, z                            Word example:           sir, zeal
     print("yooo")
 
-elif (case == 'ɫ') or (case == 'l') or (case == 'λ') or (case == 'ɭ') or (case == 'ʎ') or (case == 'ɭ') or (case == 'ḷ') or (case == 'ɬ') or (case == 'ɮ') or (case == 'ñ') or (case == 'ŋ') or (case == 'ɲ') or (case == 'ɳ') or (case == 'ṇ') or (case == ''):
+elif (case == 'ɫ') or (case == 'l') or (case == 'λ') or (case == 'ɭ') or (case == 'ʎ') or (case == 'ɭ') or (case == 'ḷ') or (case == 'ɬ') or (case == 'ɮ') or (case == 'ñ') or (case == 'ŋ') or (case == 'ɲ') or (case == 'ɳ') or (case == 'ṇ') or (case == 'n') or (case == 'l'):
     #Viseme:    nn                       Phonemes:      n, l                            Word example:           lot, not
     print("yooo")
 
-elif (case == 'ɹ') or (case == '') or (case == 'ʁ') or (case == 'ř') or (case == 'ɾ') or (case == 'ɽ') or (case == 'ṛ') or (case == 'ɻ') or (case == '#') or (case == '#'):
+elif (case == 'ɹ') or (case == 'r') or (case == 'ʁ') or (case == 'ř') or (case == 'ɾ') or (case == 'ɽ') or (case == 'ṛ') or (case == 'ɻ'):
     #Viseme:    RR                       Phonemes:      r                               Word example:           red
     print("yooo")
 
-elif (case == 'æ') or (case == 'ɑ') or (case == 'ɐ') or (case == 'ɒ') or (case == 'α') or (case == 'ã') or (case == 'ă') or (case == 'ʌ') or (case == '') or (case == ''):
+elif (case == 'æ') or (case == 'ɑ') or (case == 'ɐ') or (case == 'ɒ') or (case == 'α') or (case == 'ã') or (case == 'ă') or (case == 'ʌ') or (case == 'a'):
     #Viseme:    aa                       Phonemes:      A:                              Word example:           car
     print("yooo")
 
-elif (case == 'ə') or (case == 'ε') or (case == 'ɛ') or (case == 'ẹ') or (case == 'ɜ') or (case == 'ɚ') or (case == 'ɘ') or (case == 'ẽ') or (case == 'ĕ') or (case == ''):
+elif (case == 'ə') or (case == 'ε') or (case == 'ɛ') or (case == 'ẹ') or (case == 'ɜ') or (case == 'ɚ') or (case == 'ɘ') or (case == 'ẽ') or (case == 'ĕ') or (case == 'e'):
     #Viseme:    E                       Phonemes:      e                                Word example:           bed
     print("yooo")
 
-elif (case == 'ɪ') or (case == 'i') or (case == 'ɨ') or (case == 'ĩ') or (case == 'ĭ') or (case == '') or (case == '') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ɪ') or (case == 'i') or (case == 'ɨ') or (case == 'ĩ') or (case == 'ĭ') or (case == '') or (case == '') or (case == '') or (case == '') or (case == 'i'):
     #Viseme:    I                       Phonemes:      ih                               Word example:           tip
     print("yooo")
 
-elif (case == 'ħ') or (case == 'ɦ') or (case == 'h') or (case == 'ʰ') or (case == 'ɥ') or (case == 'ḥ') or (case == 'ɧ') or (case == 'ø') or (case == 'œ') or (case == 'œ') or (case == 'œ') or (case == 'ö') or (case == 'ɔ') or (case == 'ọ') or (case == 'ɵ') or (case == 'õ') or (case == 'ŏ') or (case == '') or (case == ''):
+elif (case == 'ħ') or (case == 'ɦ') or (case == 'h') or (case == 'ʰ') or (case == 'ɥ') or (case == 'ḥ') or (case == 'ɧ') or (case == 'ø') or (case == 'œ') or (case == 'œ') or (case == 'œ') or (case == 'ö') or (case == 'ɔ') or (case == 'ọ') or (case == 'ɵ') or (case == 'õ') or (case == 'ŏ') or (case == 'o'):
     #Viseme:    O                       Phonemes:      oh                               Word example:           toe
     print("yooo")
 
-elif (case == 'ʊ') or (case == 'ü') or (case == 'u') or (case == 'ʉ') or (case == 'ɞ') or (case == 'ũ') or (case == 'ŭ') or (case == '') or (case == '') or (case == ''):
+elif (case == 'ʊ') or (case == 'ü') or (case == 'u') or (case == 'ʉ') or (case == 'ɞ') or (case == 'ũ') or (case == 'ŭ') or (case == 'u'):
     #Viseme:    U                       Phonemes:      ou                               Word example:           book
     print("yooo")
 
