@@ -38,6 +38,8 @@ def PlaySoundOnThread(audioFileName):
 
 filePathKeys = ["audioFile", "voskModel", "config"]
 filePaths = {"audioFile" : "something.wav", "voskModel" : "ModelPath", "config" : "ConfigPath"}
+silenceTimeCriteria = 5/24
+silenceCutDown = 3/24
 keyframesPerSecond = 24
 audioFileLength = 0
 #audioFile = "D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav"
@@ -143,6 +145,7 @@ class TimeLine:
             self.keyframesPerSecond = int(keyframesPerSecond)
             self.finalKeyframe = round(fileLengthInSeconds * self.keyframesPerSecond)
             self.timeLine = []
+            self.silenceTimeLine = []
 
             for i in range(self.finalKeyframe):
                 self.timeLine.append(".")
@@ -155,6 +158,27 @@ class TimeLine:
                     character = word.word[i]
                     keyFrameTimeStamp = round(self.keyframesPerSecond * ( word.start + (secondsPerKeyframe * i)))
                     self.timeLine[keyFrameTimeStamp] = character
+
+            nrOfWords = len(list_of_Words)
+            for index in range(nrOfWords):
+                silenceTimeStamp = []
+                if(index == 0):
+                    silenceTimeStamp = [0, list_of_Words[index].start]
+                    self.silenceTimeLine.append(silenceTimeStamp)
+                elif (index == nrOfWords - 1):
+                    silenceTimeStamp = [list_of_Words[index].end, audioFileLength]
+                    self.silenceTimeLine.append(silenceTimeStamp)
+                else:
+                    silenceTimeStamp = [list_of_Words[index].end, list_of_Words[index + 1].start]
+
+                silenceTimeStamp[0] += silenceCutDown
+                silenceTimeStamp[1] -= silenceCutDown
+
+                
+                if((silenceTimeStamp[1] - silenceTimeStamp[0]) >= silenceTimeCriteria):
+                    self.silenceTimeLine.append(silenceTimeStamp)
+
+
                 
 def animateMesh(timeLine):
     print("This animations has ", len(timeLine.timeLine), " frames")
@@ -249,6 +273,19 @@ def animateMesh(timeLine):
     for c in undefinedChars:
         print(c)
 
+    for sil in timeLine.silenceTimeLine:
+        silStart = round(sil[0]*keyframesPerSecond)
+        silEnd = round(sil[1]*keyframesPerSecond)
+
+        for visme in visemeList:
+                pm.setKeyframe(visemeNodes[visme], at='weight[0]', v=0, t=silStart)
+        
+        for visme in visemeList:
+                pm.setKeyframe(visemeNodes[visme], at='weight[0]', v=0, t=silEnd)
+        
+        pm.setKeyframe(visemeNodes["Silent"], at='weight[0]', v=1, t=silStart)
+        pm.setKeyframe(visemeNodes["Silent"], at='weight[0]', v=1, t=silEnd)
+
 
 
 
@@ -264,6 +301,7 @@ def RunScript():
     ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
     animateMesh(timeLine)
+    pm.sound(file=filePaths["audioFile"])
     print("Task completed")
 
     
