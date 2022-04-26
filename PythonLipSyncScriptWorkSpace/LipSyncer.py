@@ -171,7 +171,14 @@ class TimeLine:
             nrOfWords = len(list_of_Words)
             for index in range(nrOfWords):
                 silenceTimeStamp = []
-                if(index == 0):
+                if(nrOfWords == 1):
+                    silenceTimeStamp = [0, list_of_Words[index].start]
+                    self.silenceTimeLine.append(silenceTimeStamp)
+
+                    silenceTimeStamp = [list_of_Words[index].end, audioFileLength]
+                    self.silenceTimeLine.append(silenceTimeStamp)
+
+                elif (index == 0):
                     silenceTimeStamp = [0, list_of_Words[index].start]
                     self.silenceTimeLine.append(silenceTimeStamp)
                 elif (index == nrOfWords - 1):
@@ -310,7 +317,7 @@ def RunScript():
     ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
     animateMesh(timeLine)
-    pm.sound(file=filePaths["audioFile"])
+    #pm.sound(file=filePaths["audioFile"])
     print("Task completed")
 
     
