@@ -2,6 +2,7 @@
 
 from asyncio.windows_events import NULL
 from cgi import test
+from pyexpat import model
 from re import split
 from unittest import result
 from vosk import Model, KaldiRecognizer, SetLogLevel
@@ -22,29 +23,8 @@ alertWid.show()
 
 import pymel.core as pm
 
-
-#REJECTION CORNER
-
-
-#import time
-#from playsound import playsound
-#from threading import Thread
-#import threading
-
-
-
-
-
-
-
-
-
-
-
-
-
 filePathKeys = ["audioFile", "voskModel", "config"]
-filePaths = {"audioFile" : "something.wav", "voskModel" : "ModelPath", "config" : "ConfigPath"}
+filePaths = {"audioFile" : "", "voskModel" : "", "config" : ""}
 silenceTimeCriteria = 5/24
 silenceCutDown = 3/24
 keyframesPerSecond = 24
@@ -52,13 +32,19 @@ audioFileLength = 0
 #audioFile = "D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\Hello there.wav"
 #voskModelPath =  "D:\Github\Python LipsyncScript\model"
 
-f = open("D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\LipSyncerConfig.txt", "r")
-filePaths["voskModel"] = f.readline().replace('\n', '')
-filePaths["audioFile"] = f.readline().replace('\n', '')
-f.close()
+
+
+"""Config file text data"""
+#f = open("D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\LipSyncerConfig.txt", "r")
+#filePaths["voskModel"] = f.readline().replace('\n', '')
+#filePaths["audioFile"] = f.readline().replace('\n', '')
+#f.close()
 
 SetLogLevel(0)
 
+
+
+"""
 if 'model' not in globals():
     print("Loading model...")
     if not os.path.exists(filePaths["voskModel"]):
@@ -66,7 +52,7 @@ if 'model' not in globals():
         exit (1)
     model = Model(filePaths["voskModel"])
 print("Model is loaded")
-
+"""
 
 alertWid.close()
 
@@ -308,6 +294,12 @@ def animateMesh(timeLine):
 
 
 def RunScript():
+    global silenceTimeCriteria
+    silenceTimeCriteria = float(silenceTimeCriteriaQLineEdit.text())
+    global silenceCutDown
+    silenceCutDown = float(silenceCutDownQLineEdit.text())
+    keyframesPerSecond = float(keyframesPerSecondQLineEdit.text())
+
     BindVisemeNodes()
     audioFileLength = CheckAudioFileLength()
     timeLine = TimeLine(audioFileLength, keyframesPerSecond)
@@ -322,9 +314,7 @@ def RunScript():
 
 
     print("Task completed")
-    #silenceTimeCriteria = float(silenceTimeCriteriaQLineEdit.text())
-    #silenceCutDown = float(silenceCutDownQLineEdit.text())
-    #keyframesPerSecond = float(keyframesPerSecondQLineEdit.text())
+    
 
     
 
@@ -342,9 +332,35 @@ def ChangeFilePathForAudioFile():
     
     
 def ChangeFilePathForModel():
+    
+    
+    global model
+
     newPath = pm.fileDialog2(fm=2, fileFilter="*.:")
     filePaths["voskModel"] = str(newPath[0])
     filePathQLineEdit[1].setText(filePaths["voskModel"])
+
+
+
+
+
+    print("Loading model...")
+    alertWid = QtWidgets.QWidget()
+    alertWid.resize(512, 64)
+    alertWid.setWindowTitle("Loading Model...")
+    alertWid.show()
+    
+
+
+    if not os.path.exists(filePaths["voskModel"]):
+        print ("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
+        exit (1)
+    model = Model(filePaths["voskModel"])
+    print("Model is loaded")
+
+
+    alertWid.close()
+    ##############################################################
     
 def ChangeFilePathForConfig():
     filePathQLineEdit[2].setText("NOT WORKING")
@@ -352,8 +368,8 @@ def ChangeFilePathForConfig():
 
 #MAIN LOOP
 wid = QtWidgets.QWidget()
-wid.resize(1024, 1024)
-wid.setWindowTitle("Window")
+wid.resize(548, 720)
+wid.setWindowTitle("Lipsyncer")
 
 #File system
 
@@ -381,25 +397,37 @@ changeFilePathQPushButton[2].clicked.connect(ChangeFilePathForConfig)
 
 
 RunScriptQPushButton = QtWidgets.QPushButton('Run Script', parent = wid)
-RunScriptQPushButton.move(512, 48 * index)
+RunScriptQPushButton.move(458, 48 * index)
 RunScriptQPushButton.clicked.connect(RunScript)
 
+"""
 UndoQPushButton = QtWidgets.QPushButton('Undo', parent = wid)
 UndoQPushButton.move(512, 56 * index)
 UndoQPushButton.clicked.connect(pm.undo)
+"""
 
 importAudioQCheckBox = QtWidgets.QCheckBox('Import audio to scene', parent = wid)
-importAudioQCheckBox.move(512, 512)
+importAudioQCheckBox.move(256, 512)
 
 keyframesPerSecondQLineEdit = QtWidgets.QLineEdit("24", parent = wid)
-keyframesPerSecondQLineEdit.move(512, 548)
+keyframesPerSecondQLineEdit.move(412, 256)
 silenceTimeCriteriaQLineEdit = QtWidgets.QLineEdit(str(round(5/24, 6)), parent = wid)
-silenceTimeCriteriaQLineEdit.move(512, 584)
+silenceTimeCriteriaQLineEdit.move(412, 280)
 silenceCutDownQLineEdit = QtWidgets.QLineEdit(str(round(3/24, 6)), parent = wid)
-silenceCutDownQLineEdit.move(512, 608)
+silenceCutDownQLineEdit.move(412, 304)
 
 
+keyframesPerSecondLabel = QtWidgets.QLabel(wid)
+keyframesPerSecondLabel.setText("Keyframes per second")
+keyframesPerSecondLabel.move(256, 256)
 
+silenceTimeCriteriaLabel = QtWidgets.QLabel(wid)
+silenceTimeCriteriaLabel.setText("Silence Time-Criteria")
+silenceTimeCriteriaLabel.move(256, 280)
+
+silenceCutDownLabel = QtWidgets.QLabel(wid)
+silenceCutDownLabel.setText("Silence Cut-Down")
+silenceCutDownLabel.move(256, 304)
 
 #Viseme System
 #Lists all blendshapes in scene
