@@ -22,7 +22,7 @@ alertWid.show()
 
 import pymel.core as pm
 
-"""
+
 #REJECTION CORNER
 
 
@@ -32,13 +32,12 @@ import pymel.core as pm
 #import threading
 
 
-def PlaySoundOnThread(audioFileName):
-    playsound(audioFileName)
-"""
 
 
 
-"""#Reimport This"""
+
+
+
 
 
 
@@ -317,8 +316,15 @@ def RunScript():
     ConvertEnglishToIpa(list_of_Words)
     timeLine.ModifyTimeLine(list_of_Words)
     animateMesh(timeLine)
-    #pm.sound(file=filePaths["audioFile"])
+
+    if importAudioQCheckBox.isChecked() is True:
+        pm.sound(file=filePaths["audioFile"], offset=0)
+
+
     print("Task completed")
+    #silenceTimeCriteria = float(silenceTimeCriteriaQLineEdit.text())
+    #silenceCutDown = float(silenceCutDownQLineEdit.text())
+    #keyframesPerSecond = float(keyframesPerSecondQLineEdit.text())
 
     
 
@@ -381,6 +387,17 @@ RunScriptQPushButton.clicked.connect(RunScript)
 UndoQPushButton = QtWidgets.QPushButton('Undo', parent = wid)
 UndoQPushButton.move(512, 56 * index)
 UndoQPushButton.clicked.connect(pm.undo)
+
+importAudioQCheckBox = QtWidgets.QCheckBox('Import audio to scene', parent = wid)
+importAudioQCheckBox.move(512, 512)
+
+keyframesPerSecondQLineEdit = QtWidgets.QLineEdit("24", parent = wid)
+keyframesPerSecondQLineEdit.move(512, 548)
+silenceTimeCriteriaQLineEdit = QtWidgets.QLineEdit(str(round(5/24, 6)), parent = wid)
+silenceTimeCriteriaQLineEdit.move(512, 584)
+silenceCutDownQLineEdit = QtWidgets.QLineEdit(str(round(3/24, 6)), parent = wid)
+silenceCutDownQLineEdit.move(512, 608)
+
 
 
 
