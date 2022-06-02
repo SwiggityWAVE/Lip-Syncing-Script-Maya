@@ -1,3 +1,18 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #https://towardsdatascience.com/speech-recognition-with-timestamps-934ede4234b2
 
 from asyncio.windows_events import NULL
@@ -266,7 +281,7 @@ def animateMesh(timeLine):
                 pm.setKeyframe(visemeNodes["U"], at='weight[0]', v=1, t=keyframe)
 
             else:
-                print("Shit is undefined")
+                print("character is undefined")
                 undefinedChars.append(case)
     
     print("undefined Chars: ")
@@ -309,8 +324,8 @@ def RunScript():
     timeLine.ModifyTimeLine(list_of_Words)
     animateMesh(timeLine)
 
-    if importAudioQCheckBox.isChecked() is True:
-        pm.sound(file=filePaths["audioFile"], offset=0)
+    #if importAudioQCheckBox.isChecked() is True:
+    #    pm.sound(file=filePaths["audioFile"], offset=0)
 
 
     print("Task completed")
@@ -406,8 +421,8 @@ UndoQPushButton.move(512, 56 * index)
 UndoQPushButton.clicked.connect(pm.undo)
 """
 
-importAudioQCheckBox = QtWidgets.QCheckBox('Import audio to scene', parent = wid)
-importAudioQCheckBox.move(256, 512)
+#importAudioQCheckBox = QtWidgets.QCheckBox('Import audio to scene', parent = wid)
+#importAudioQCheckBox.move(256, 512)
 
 keyframesPerSecondQLineEdit = QtWidgets.QLineEdit("24", parent = wid)
 keyframesPerSecondQLineEdit.move(412, 256)
