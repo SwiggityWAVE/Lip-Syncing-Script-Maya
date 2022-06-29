@@ -1,19 +1,39 @@
+"""
+This Lip-Syncing script was created by me Adrian Björkholm for my bachellor thesis.
+Please come and visit my site to see more of the stuff I have created, https://adrianbjorkholm.com/
+
+Word class and the "transcribeFile" is inspiered by this code example:
+    https://towardsdatascience.com/speech-recognition-with-timestamps-934ede4234b2
+
+BEFORE RUNNING THE SCRIPT:
+
+INSTALLATION GUIDE:
+    Vosk, https://alphacephei.com/vosk/install
+    eng-to-ipa, https://pypi.org/project/eng-to-ipa/
+
+    To succesfully install the packages you might need to update your Package manager (pip3) inside of Maya.
+    The following link is instructions on how to install Python packages for Maya:
+    https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2022/ENU/Maya-Scripting/files/GUID-72A245EC-CDB4-46AB-BEE0-4BBBF9791627-htm.html
+    
+Instructions:
+    This lip syncing script uses the Oculus documentation ( https://developer.oculus.com/documentation/unity/audio-ovrlipsync-viseme-reference/ )
+    as references of what visemes are being used. Bind the prefered blendshape to the correct viseme.
+
+
+    The file format needs to be .wav and only have one channel in mono. The script does not support stereo sound.
+    The audio file needs to be formatted to PCM. If the audiofile has the wrong configurations Maya might crash so make sure to save your scene before you run the script.
+
+
+    The keyframes per second box need to have the same value as the animation timelines framerate.
+    The "Silence Time-Criteria" and "Silence Cut-Down" boxes are configurable to the animator's preference.
+    "Silence Time-Criteria" keeps track of how long the silence is between the said words in the audio file and will give 
+    the mesh instructions to close the mouth between the words depending on how long the silence is between the words.
+    "Silence Cut-Down" determines how much time it will take for the mesh to close its mouth since the silence was initiated.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-#https://towardsdatascience.com/speech-recognition-with-timestamps-934ede4234b2
+"""
 
 from asyncio.windows_events import NULL
 from cgi import test
@@ -333,9 +353,8 @@ def RunScript():
 
     
 
-#RunScript()
 
-##UI and Pymel##
+##UI and Filepaths config
 
 
 def ChangeFilePathForAudioFile():
@@ -378,7 +397,8 @@ def ChangeFilePathForModel():
     ##############################################################
     
 def ChangeFilePathForConfig():
-    filePathQLineEdit[2].setText("NOT WORKING")
+    filePathQLineEdit[2].setText("Read console")
+    print("Adding configuration profiles has not been added to the script yet")
 
 
 #MAIN LOOP
@@ -409,17 +429,9 @@ changeFilePathQPushButton[0].clicked.connect(ChangeFilePathForAudioFile)
 changeFilePathQPushButton[1].clicked.connect(ChangeFilePathForModel)
 changeFilePathQPushButton[2].clicked.connect(ChangeFilePathForConfig)
 
-
-
 RunScriptQPushButton = QtWidgets.QPushButton('Run Script', parent = wid)
 RunScriptQPushButton.move(458, 48 * index)
 RunScriptQPushButton.clicked.connect(RunScript)
-
-"""
-UndoQPushButton = QtWidgets.QPushButton('Undo', parent = wid)
-UndoQPushButton.move(512, 56 * index)
-UndoQPushButton.clicked.connect(pm.undo)
-"""
 
 #importAudioQCheckBox = QtWidgets.QCheckBox('Import audio to scene', parent = wid)
 #importAudioQCheckBox.move(256, 512)
@@ -463,9 +475,6 @@ def BindVisemeNodes():
     for viseme in visemeList:
         visemeNodes[viseme] = visemeQComboBox[index].currentText() + '.envelope'
         index += 1
-    
-        
-
 
 index = 0
 for viseme in visemeList:
@@ -480,25 +489,4 @@ for viseme in visemeList:
     
     index += 1
 
-
-
-
-
-############################################
-"""
-dropDown = QtWidgets.QComboBox(wid)
-dropDown.addItems(blendShapesAsString)
-dropDown.move(dropDownLabel.width(), 0)
-"""
-
-
-
 wid.show()
-
-"""
-#Execute mainProgram
-executeButton = QtWidgets.QPushButton('testFunc', parent = wid)
-executeButton.resize(128, 32)
-executeButton.move(20, 20)
-executeButton.clicked.connect(runMainProgram)
-"""
