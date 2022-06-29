@@ -1,2 +1,0 @@
-D:\Github\Python LipsyncScript\model
-D:\Github\Python LipsyncScript\LipsyncingScriptRepository\Lip-Syncing-Script-Maya\PythonLipSyncScriptWorkSpace\AudioFiles\TestDialouge.wav
